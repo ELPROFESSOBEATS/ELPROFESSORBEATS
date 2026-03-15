@@ -1,0 +1,697 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ELPROFESSORBEATS</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+```
+:root {
+--black: #0a0a0a;
+--cream: #f5f0e8;
+--cream-dark: #ede8dd;
+--grey: #888;
+--accent: #1a1a1a;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+background: var(--black);
+color: var(--cream);
+font-family: 'DM Mono', monospace;
+overflow-x: hidden;
+cursor: none;
+}
+
+/* Custom cursor */
+.cursor {
+width: 12px; height: 12px;
+background: var(--cream);
+border-radius: 50%;
+position: fixed;
+top: 0; left: 0;
+pointer-events: none;
+z-index: 9999;
+transition: transform 0.15s ease, opacity 0.15s ease;
+mix-blend-mode: difference;
+}
+.cursor-ring {
+width: 36px; height: 36px;
+border: 1px solid rgba(245,240,232,0.4);
+border-radius: 50%;
+position: fixed;
+top: 0; left: 0;
+pointer-events: none;
+z-index: 9998;
+transition: transform 0.35s cubic-bezier(0.23,1,0.32,1);
+}
+
+/* Nav */
+nav {
+position: fixed; top: 0; left: 0; right: 0;
+z-index: 100;
+padding: 28px 48px;
+display: flex; align-items: center; justify-content: space-between;
+border-bottom: 1px solid rgba(245,240,232,0.07);
+background: rgba(10,10,10,0.85);
+backdrop-filter: blur(12px);
+}
+.nav-logo {
+font-family: 'Playfair Display', serif;
+font-size: 1.1rem;
+font-weight: 700;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+color: var(--cream);
+text-decoration: none;
+}
+.nav-links {
+display: flex; gap: 40px; list-style: none;
+}
+.nav-links a {
+color: var(--grey);
+text-decoration: none;
+font-size: 0.68rem;
+letter-spacing: 0.18em;
+text-transform: uppercase;
+transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--cream); }
+
+/* Hero */
+.hero {
+min-height: 100vh;
+display: flex; flex-direction: column;
+justify-content: flex-end;
+padding: 0 48px 80px;
+position: relative;
+overflow: hidden;
+}
+.hero-bg {
+position: absolute; inset: 0;
+background: radial-gradient(ellipse 60% 60% at 70% 40%, rgba(245,240,232,0.04) 0%, transparent 70%);
+pointer-events: none;
+}
+.hero-grid {
+position: absolute; inset: 0;
+background-image:
+linear-gradient(rgba(245,240,232,0.025) 1px, transparent 1px),
+linear-gradient(90deg, rgba(245,240,232,0.025) 1px, transparent 1px);
+background-size: 80px 80px;
+pointer-events: none;
+}
+.hero-tag {
+font-size: 0.65rem;
+letter-spacing: 0.25em;
+text-transform: uppercase;
+color: var(--grey);
+margin-bottom: 24px;
+opacity: 0;
+animation: fadeUp 0.8s 0.2s forwards;
+}
+.hero-title {
+font-family: 'Playfair Display', serif;
+font-size: clamp(4rem, 10vw, 9rem);
+font-weight: 900;
+line-height: 0.92;
+letter-spacing: -0.02em;
+color: var(--cream);
+opacity: 0;
+animation: fadeUp 0.9s 0.4s forwards;
+}
+.hero-title em {
+font-style: italic;
+color: transparent;
+-webkit-text-stroke: 1px var(--cream-dark);
+}
+.hero-sub {
+margin-top: 32px;
+font-size: 0.72rem;
+letter-spacing: 0.15em;
+color: var(--grey);
+max-width: 400px;
+line-height: 1.8;
+opacity: 0;
+animation: fadeUp 0.9s 0.6s forwards;
+}
+.hero-cta {
+margin-top: 48px;
+display: flex; gap: 20px; align-items: center;
+opacity: 0;
+animation: fadeUp 0.9s 0.8s forwards;
+}
+.btn-primary {
+display: inline-block;
+padding: 16px 40px;
+background: var(--cream);
+color: var(--black);
+text-decoration: none;
+font-family: 'DM Mono', monospace;
+font-size: 0.68rem;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+font-weight: 500;
+transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+.btn-primary:hover {
+background: var(--cream-dark);
+transform: translateY(-2px);
+}
+.btn-ghost {
+display: inline-block;
+padding: 16px 40px;
+border: 1px solid rgba(245,240,232,0.2);
+color: var(--cream);
+text-decoration: none;
+font-family: 'DM Mono', monospace;
+font-size: 0.68rem;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+transition: border-color 0.2s, transform 0.2s;
+}
+.btn-ghost:hover {
+border-color: var(--cream);
+transform: translateY(-2px);
+}
+
+.hero-scroll {
+position: absolute; right: 48px; bottom: 80px;
+display: flex; flex-direction: column; align-items: center; gap: 12px;
+opacity: 0; animation: fadeIn 1s 1.2s forwards;
+}
+.hero-scroll span {
+font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--grey);
+writing-mode: vertical-rl;
+}
+.scroll-line {
+width: 1px; height: 60px;
+background: linear-gradient(to bottom, var(--grey), transparent);
+animation: scrollPulse 2s ease-in-out infinite;
+}
+
+/* Section shared */
+section { padding: 120px 48px; }
+
+.section-label {
+font-size: 0.62rem;
+letter-spacing: 0.3em;
+text-transform: uppercase;
+color: var(--grey);
+margin-bottom: 64px;
+display: flex; align-items: center; gap: 20px;
+}
+.section-label::after {
+content: '';
+flex: 1;
+height: 1px;
+background: rgba(245,240,232,0.1);
+}
+
+/* Products */
+#products { background: var(--black); }
+
+.products-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+gap: 2px;
+}
+
+.product-card {
+background: #111;
+padding: 48px 40px;
+position: relative;
+overflow: hidden;
+transition: background 0.3s;
+border: 1px solid rgba(245,240,232,0.05);
+}
+.product-card:hover { background: #161616; }
+.product-card::before {
+content: '';
+position: absolute; top: 0; left: 0; right: 0;
+height: 1px;
+background: linear-gradient(90deg, transparent, rgba(245,240,232,0.2), transparent);
+opacity: 0;
+transition: opacity 0.3s;
+}
+.product-card:hover::before { opacity: 1; }
+
+.product-badge {
+display: inline-block;
+font-size: 0.58rem;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+color: var(--black);
+background: var(--cream);
+padding: 4px 12px;
+margin-bottom: 32px;
+}
+
+.product-icon {
+width: 64px; height: 64px;
+margin-bottom: 28px;
+opacity: 0.7;
+}
+
+.product-name {
+font-family: 'Playfair Display', serif;
+font-size: 1.6rem;
+font-weight: 700;
+line-height: 1.2;
+color: var(--cream);
+margin-bottom: 16px;
+}
+
+.product-desc {
+font-size: 0.68rem;
+line-height: 1.9;
+color: var(--grey);
+margin-bottom: 32px;
+}
+
+.product-meta {
+display: flex; align-items: flex-end; justify-content: space-between;
+margin-top: auto;
+padding-top: 32px;
+border-top: 1px solid rgba(245,240,232,0.08);
+}
+
+.product-price {
+font-family: 'Playfair Display', serif;
+font-size: 2.2rem;
+font-weight: 900;
+color: var(--cream);
+line-height: 1;
+}
+.product-price sup {
+font-size: 1rem;
+vertical-align: super;
+}
+
+.product-includes {
+font-size: 0.6rem;
+letter-spacing: 0.1em;
+color: var(--grey);
+line-height: 1.8;
+text-align: right;
+}
+
+.product-buy {
+display: block;
+width: 100%;
+margin-top: 32px;
+padding: 18px;
+background: var(--cream);
+color: var(--black);
+text-align: center;
+text-decoration: none;
+font-family: 'DM Mono', monospace;
+font-size: 0.68rem;
+letter-spacing: 0.22em;
+text-transform: uppercase;
+font-weight: 500;
+transition: background 0.2s, transform 0.2s;
+}
+.product-buy:hover {
+background: var(--cream-dark);
+transform: translateY(-2px);
+}
+
+/* About */
+#about {
+background: var(--cream);
+color: var(--black);
+}
+#about .section-label {
+color: rgba(10,10,10,0.4);
+}
+#about .section-label::after {
+background: rgba(10,10,10,0.1);
+}
+.about-inner {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 80px;
+align-items: start;
+}
+.about-title {
+font-family: 'Playfair Display', serif;
+font-size: clamp(2.4rem, 4vw, 4rem);
+font-weight: 900;
+line-height: 1.05;
+letter-spacing: -0.02em;
+color: var(--black);
+}
+.about-title em { font-style: italic; }
+.about-text {
+font-size: 0.72rem;
+line-height: 2;
+color: rgba(10,10,10,0.65);
+margin-bottom: 32px;
+}
+.about-stats {
+display: grid; grid-template-columns: 1fr 1fr; gap: 32px;
+margin-top: 40px;
+}
+.stat-num {
+font-family: 'Playfair Display', serif;
+font-size: 2.8rem;
+font-weight: 900;
+color: var(--black);
+line-height: 1;
+}
+.stat-label {
+font-size: 0.6rem;
+letter-spacing: 0.15em;
+text-transform: uppercase;
+color: rgba(10,10,10,0.4);
+margin-top: 6px;
+}
+
+/* Contact */
+#contact { background: #0d0d0d; }
+.contact-inner {
+display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+}
+.contact-title {
+font-family: 'Playfair Display', serif;
+font-size: clamp(2.2rem, 3.5vw, 3.5rem);
+font-weight: 900;
+line-height: 1.1;
+color: var(--cream);
+}
+.contact-title em { font-style: italic; color: transparent; -webkit-text-stroke: 1px rgba(245,240,232,0.4); }
+.contact-text {
+font-size: 0.7rem; line-height: 2; color: var(--grey); margin-top: 20px;
+}
+.contact-links { display: flex; flex-direction: column; gap: 0; margin-top: 40px; }
+.contact-link {
+display: flex; align-items: center; justify-content: space-between;
+padding: 20px 0;
+border-bottom: 1px solid rgba(245,240,232,0.08);
+text-decoration: none;
+color: var(--cream);
+font-size: 0.68rem;
+letter-spacing: 0.15em;
+text-transform: uppercase;
+transition: color 0.2s;
+}
+.contact-link:hover { color: var(--grey); }
+.contact-link span { font-size: 1.2rem; }
+
+/* Footer */
+footer {
+padding: 40px 48px;
+border-top: 1px solid rgba(245,240,232,0.07);
+display: flex; justify-content: space-between; align-items: center;
+}
+.footer-logo {
+font-family: 'Playfair Display', serif;
+font-size: 0.9rem;
+font-weight: 700;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+color: var(--cream);
+}
+.footer-copy {
+font-size: 0.6rem;
+letter-spacing: 0.12em;
+color: var(--grey);
+}
+
+/* Divider */
+.divider { width: 100%; height: 1px; background: rgba(245,240,232,0.07); }
+
+/* Animations */
+@keyframes fadeUp {
+from { opacity: 0; transform: translateY(30px); }
+to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+from { opacity: 0; } to { opacity: 1; }
+}
+@keyframes scrollPulse {
+0%, 100% { opacity: 0.3; } 50% { opacity: 1; }
+}
+
+.reveal {
+opacity: 0; transform: translateY(40px);
+transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* Waveform decoration */
+.waveform {
+display: flex; align-items: center; gap: 3px; margin-bottom: 20px;
+}
+.wave-bar {
+width: 2px;
+background: rgba(245,240,232,0.3);
+border-radius: 2px;
+animation: wave 1.4s ease-in-out infinite;
+}
+@keyframes wave {
+0%, 100% { transform: scaleY(1); }
+50% { transform: scaleY(2.5); }
+}
+
+@media (max-width: 768px) {
+nav { padding: 20px 24px; }
+.nav-links { display: none; }
+.hero { padding: 0 24px 60px; }
+section { padding: 80px 24px; }
+.about-inner, .contact-inner { grid-template-columns: 1fr; gap: 48px; }
+footer { flex-direction: column; gap: 16px; text-align: center; }
+}
+```
+
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Nav -->
+
+<nav>
+<a href="#" class="nav-logo">ElProfessor</a>
+<ul class="nav-links">
+<li><a href="#products">Store</a></li>
+<li><a href="#about">About</a></li>
+<li><a href="#contact">Contact</a></li>
+</ul>
+</nav>
+
+<!-- Hero -->
+
+<section class="hero">
+<div class="hero-bg"></div>
+<div class="hero-grid"></div>
+
+```
+<div class="hero-scroll">
+<div class="scroll-line"></div>
+<span>Scroll</span>
+</div>
+
+<div class="waveform">
+<div class="wave-bar" style="height:8px; animation-delay:0s"></div>
+<div class="wave-bar" style="height:20px; animation-delay:0.1s"></div>
+<div class="wave-bar" style="height:14px; animation-delay:0.2s"></div>
+<div class="wave-bar" style="height:28px; animation-delay:0.3s"></div>
+<div class="wave-bar" style="height:10px; animation-delay:0.4s"></div>
+<div class="wave-bar" style="height:22px; animation-delay:0.5s"></div>
+<div class="wave-bar" style="height:16px; animation-delay:0.6s"></div>
+<div class="wave-bar" style="height:8px; animation-delay:0.7s"></div>
+</div>
+
+<p class="hero-tag">Producer · Beat Maker · Sound Designer</p>
+<h1 class="hero-title">El<em>Professor</em><br>Beats</h1>
+<p class="hero-sub">Premium trap beats & production tools. Built for artists who refuse to sound average.</p>
+<div class="hero-cta">
+<a href="#products" class="btn-primary">Browse Store</a>
+<a href="#about" class="btn-ghost">About</a>
+</div>
+```
+
+</section>
+
+<div class="divider"></div>
+
+<!-- Products -->
+
+<section id="products">
+<p class="section-label reveal">Store</p>
+<div class="products-grid">
+
+```
+<!-- Drum Kit Card -->
+<div class="product-card reveal">
+<span class="product-badge">Available Now</span>
+<svg class="product-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+<ellipse cx="32" cy="20" rx="24" ry="8" stroke="#f5f0e8" stroke-width="1.5"/>
+<path d="M8 20 L8 44 Q8 52 32 52 Q56 52 56 44 L56 20" stroke="#f5f0e8" stroke-width="1.5" fill="none"/>
+<ellipse cx="32" cy="44" rx="24" ry="8" stroke="#f5f0e8" stroke-width="1.5"/>
+<line x1="20" y1="16" x2="20" y2="2" stroke="#f5f0e8" stroke-width="1.5"/>
+<line x1="44" y1="16" x2="44" y2="2" stroke="#f5f0e8" stroke-width="1.5"/>
+</svg>
+<h2 class="product-name">Trap Beats Essentials<br>Drum Kit</h2>
+<p class="product-desc">
+High-quality drum samples crafted for hard-hitting trap production.
+808s, hi-hats, snares, kicks and percussion — everything you need
+to build professional trap beats from scratch.
+</p>
+<div class="product-meta">
+<div class="product-price"><sup>€</sup>10</div>
+<div class="product-includes">
+One-time purchase<br>
+Instant download<br>
+Royalty free
+</div>
+</div>
+<a href="https://elprofessorbeats.gumroad.com/l/tiejr" target="_blank" class="product-buy">
+Buy Now — €10
+</a>
+</div>
+
+<!-- Coming Soon Card -->
+<div class="product-card reveal" style="opacity: 0.5; pointer-events: none;">
+<span class="product-badge" style="background: rgba(245,240,232,0.15); color: var(--grey);">Coming Soon</span>
+<svg class="product-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="8" y="20" width="48" height="30" rx="2" stroke="#888" stroke-width="1.5"/>
+<path d="M20 20V16a12 12 0 0124 0v4" stroke="#888" stroke-width="1.5"/>
+<circle cx="32" cy="35" r="4" stroke="#888" stroke-width="1.5"/>
+</svg>
+<h2 class="product-name" style="color: var(--grey);">Exclusive<br>Beat Licenses</h2>
+<p class="product-desc">
+Premium exclusive licenses for original trap beats.
+Full ownership, unlimited commercial use.
+</p>
+<div class="product-meta">
+<div class="product-price" style="color: var(--grey);">TBA</div>
+<div class="product-includes">Dropping soon</div>
+</div>
+</div>
+
+</div>
+```
+
+</section>
+
+<div class="divider"></div>
+
+<!-- About -->
+
+<section id="about">
+<p class="section-label reveal">About</p>
+<div class="about-inner">
+<div>
+<h2 class="about-title reveal">Crafting <em>sounds</em><br>that move artists.</h2>
+<div class="about-stats reveal">
+<div>
+<div class="stat-num">808</div>
+<div class="stat-label">Driven</div>
+</div>
+<div>
+<div class="stat-num">100%</div>
+<div class="stat-label">Royalty Free</div>
+</div>
+</div>
+</div>
+<div>
+<p class="about-text reveal">
+ELPROFESSORBEATS is a producer dedicated to delivering
+hard-hitting, radio-ready trap production tools. Every
+drum kit and beat is designed with one goal — to give
+artists the sonic foundation to build something undeniable.
+</p>
+<p class="about-text reveal">
+Whether you're a seasoned producer looking for fresh samples
+or an up-and-coming artist building your first tracks,
+the tools here are made to elevate your sound.
+</p>
+<a href="#products" class="btn-primary" style="display:inline-block; background: var(--black); color: var(--cream);" class="reveal">
+Shop Now
+</a>
+</div>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Contact -->
+
+<section id="contact">
+<p class="section-label reveal">Contact</p>
+<div class="contact-inner">
+<div>
+<h2 class="contact-title reveal">Let's make<br><em>something</em><br>together.</h2>
+<p class="contact-text reveal">
+For custom beats, licensing inquiries,<br>
+or collaborations — reach out directly.
+</p>
+</div>
+<div class="contact-links reveal">
+<a href="https://elprofessorbeats.gumroad.com" target="_blank" class="contact-link">
+Gumroad Store <span>→</span>
+</a>
+<a href="mailto:contact@elprofessorbeats.com" class="contact-link">
+Email <span>→</span>
+</a>
+</div>
+</div>
+</section>
+
+<!-- Footer -->
+
+<footer>
+<div class="footer-logo">ElProfessorBeats</div>
+<div class="footer-copy">© 2026 ELPROFESSORBEATS. All rights reserved.</div>
+</footer>
+
+<script>
+// Custom cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+mx = e.clientX; my = e.clientY;
+cursor.style.transform = `translate(${mx - 6}px, ${my - 6}px)`;
+});
+
+function animateRing() {
+rx += (mx - rx - 18) * 0.12;
+ry += (my - ry - 18) * 0.12;
+ring.style.transform = `translate(${rx}px, ${ry}px)`;
+requestAnimationFrame(animateRing);
+}
+animateRing();
+
+document.querySelectorAll('a, button').forEach(el => {
+el.addEventListener('mouseenter', () => {
+cursor.style.transform += ' scale(1.8)';
+ring.style.transform += ' scale(1.5)';
+});
+el.addEventListener('mouseleave', () => {});
+});
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+entries.forEach((entry, i) => {
+if (entry.isIntersecting) {
+setTimeout(() => entry.target.classList.add('visible'), i * 80);
+observer.unobserve(entry.target);
+}
+});
+}, { threshold: 0.1 });
+
+reveals.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
