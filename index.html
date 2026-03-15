@@ -16,14 +16,13 @@
 --accent: #1a1a1a;
 }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; background: #0a0a0a; }
 
 body {
-background: var(--black);
+background: #0a0a0a !important;
 color: var(--cream);
 font-family: 'DM Mono', monospace;
 overflow-x: hidden;
-cursor: none;
 }
 
 /* Custom cursor */
@@ -124,8 +123,8 @@ animation: fadeUp 0.9s 0.4s forwards;
 }
 .hero-title em {
 font-style: italic;
-color: transparent;
--webkit-text-stroke: 1px var(--cream-dark);
+color: var(--cream);
+opacity: 0.6;
 }
 .hero-sub {
 margin-top: 32px;
@@ -471,9 +470,6 @@ footer { flex-direction: column; gap: 16px; text-align: center; }
 </head>
 <body>
 
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
-
 <!-- Nav -->
 
 <nav>
@@ -509,7 +505,7 @@ footer { flex-direction: column; gap: 16px; text-align: center; }
 </div>
 
 <p class="hero-tag">Producer · Beat Maker · Sound Designer</p>
-<h1 class="hero-title">El<em>Professor</em><br>Beats</h1>
+<h1 class="hero-title">El<em>Professor</em><br/>Beats</h1>
 <p class="hero-sub">Premium trap beats & production tools. Built for artists who refuse to sound average.</p>
 <div class="hero-cta">
 <a href="#products" class="btn-primary">Browse Store</a>
@@ -638,7 +634,7 @@ or collaborations — reach out directly.
 <a href="https://elprofessorbeats.gumroad.com" target="_blank" class="contact-link">
 Gumroad Store <span>→</span>
 </a>
-<a href="mailto:contact@elprofessorbeats.com" class="contact-link">
+<a href="/cdn-cgi/l/email-protection#ec8f8382988d8f98ac89809c9e838a899f9f839e8e898d989fc28f8381" class="contact-link">
 Email <span>→</span>
 </a>
 </div>
@@ -653,31 +649,6 @@ Email <span>→</span>
 </footer>
 
 <script>
-// Custom cursor
-const cursor = document.getElementById('cursor');
-const ring = document.getElementById('cursorRing');
-let mx = 0, my = 0, rx = 0, ry = 0;
-
-document.addEventListener('mousemove', e => {
-mx = e.clientX; my = e.clientY;
-cursor.style.transform = `translate(${mx - 6}px, ${my - 6}px)`;
-});
-
-function animateRing() {
-rx += (mx - rx - 18) * 0.12;
-ry += (my - ry - 18) * 0.12;
-ring.style.transform = `translate(${rx}px, ${ry}px)`;
-requestAnimationFrame(animateRing);
-}
-animateRing();
-
-document.querySelectorAll('a, button').forEach(el => {
-el.addEventListener('mouseenter', () => {
-cursor.style.transform += ' scale(1.8)';
-ring.style.transform += ' scale(1.5)';
-});
-el.addEventListener('mouseleave', () => {});
-});
 
 // Scroll reveal
 const reveals = document.querySelectorAll('.reveal');
@@ -685,13 +656,4 @@ const observer = new IntersectionObserver((entries) => {
 entries.forEach((entry, i) => {
 if (entry.isIntersecting) {
 setTimeout(() => entry.target.classList.add('visible'), i * 80);
-observer.unobserve(entry.target);
-}
-});
-}, { threshold: 0.1 });
-
-reveals.forEach(el => observer.observe(el));
-</script>
-
-</body>
-</html>
+o
